@@ -25,5 +25,6 @@ router.put('/:id',
   validateTalkWA,
   validateTalkR,
   TalkerController.updateTalker);
+router.delete('/:id', validateToken, TalkerController.deleteTalker);
 
 module.exports = router;
