@@ -10,6 +10,7 @@ const { validateToken,
   validateTalkR } = require('../middlewares/talker');
 
 router.get('/', TalkerController.getAllTalkers);
+router.get('/search', validateToken, TalkerController.getTalkerByName);
 router.get('/:id', TalkerController.getTalkerById);
 router.post('/',
   validateToken,

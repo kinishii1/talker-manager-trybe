@@ -50,10 +50,25 @@ const deleteTalker = async (req, res) => {
   res.status(204).end();
 };
 
+const getTalkerByName = async (req, res) => {
+  const { q } = req.query;
+  const data = await readJsonData(PATH);
+
+  if (!q) return res.status(200).json(data);
+
+  const filteredData = data
+    .filter((talker) => talker.name.toLowerCase().includes(q.toLowerCase()));
+
+  if (filteredData.length === 0) return res.status(200).json([]);
+
+  res.status(200).json(filteredData);
+};
+
 module.exports = {
   getAllTalkers,
   getTalkerById,
   createTalker,
   updateTalker,
   deleteTalker,
+  getTalkerByName,
 };
