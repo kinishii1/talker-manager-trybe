@@ -51,13 +51,13 @@ const deleteTalker = async (req, res) => {
 };
 
 const getTalkerByName = async (req, res) => {
-  const { q } = req.query;
+  const name = req.query.q;
   const data = await readJsonData(PATH);
 
-  if (!q) return res.status(200).json(data);
+  if (!name) return res.status(200).json(data);
 
   const filteredData = data
-    .filter((talker) => talker.name.toLowerCase().includes(q.toLowerCase()));
+    .filter((talker) => talker.name.toLowerCase().includes(name.toLowerCase()));
 
   if (filteredData.length === 0) return res.status(200).json([]);
 
