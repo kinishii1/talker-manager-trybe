@@ -1,3 +1,5 @@
+const isFloat = require('../utils/isFloat');
+
 const validateToken = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
@@ -49,11 +51,16 @@ const validateTalkWA = (req, res, next) => {
 
 const validateTalkR = (req, res, next) => {
   const { talk } = req.body;
-  if (!talk.rate) {
+  if (talk.rate === undefined) {
     return res.status(400).json({ message: 'O campo "rate" é obrigatório' });
   }
+  if (isFloat(talk.rate)) {
+    return res.status(400)
+      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+  }
   if (talk.rate < 1 || talk.rate > 5) {
-    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+    return res.status(400)
+      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
   }
   next();
 };

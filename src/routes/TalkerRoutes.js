@@ -18,5 +18,12 @@ router.post('/',
   validateTalkWA,
   validateTalkR,
   TalkerController.createTalker);
+router.put('/:id', 
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalkWA,
+  validateTalkR,
+  TalkerController.updateTalker);
 
 module.exports = router;
