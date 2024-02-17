@@ -112,6 +112,20 @@ const getTalkerByName = async (req, res) => {
   return res.status(200).json([]);
 };
 
+const updateRateTalker = async (req, res) => {
+  const { id } = req.params;
+  const { rate } = req.body;
+  const data = await readJsonData(PATH);
+
+  const foundTalker = data.find((talker) => talker.id === Number(id));
+  if (!foundTalker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+
+  const updatedTalker = { ...foundTalker, talk: { ...foundTalker.talk, rate } };
+  const updatedData = data.map((talker) => (talker.id === Number(id) ? updatedTalker : talker));
+  await writeJsonData(PATH, updatedData);
+  return res.status(204).json();
+};
+
 module.exports = {
   getAllTalkers,
   getTalkerById,
@@ -119,4 +133,5 @@ module.exports = {
   updateTalker,
   deleteTalker,
   getTalkerByName,
+  updateRateTalker,
 };

@@ -7,7 +7,9 @@ const { validateToken,
   validateName,
   validateAge,
   validateTalkWA,
-  validateTalkR } = require('../middlewares/talker');
+  validateTalkR,
+  validateRate,
+} = require('../middlewares/talker');
 const { validateRateQuery, validateWatchedDate } = require('../middlewares/query');
 
 router.get('/', TalkerController.getAllTalkers);
@@ -32,4 +34,6 @@ router.put('/:id',
   validateTalkR,
   TalkerController.updateTalker);
 router.delete('/:id', validateToken, TalkerController.deleteTalker);
+router.patch('/rate/:id', validateToken, validateRate, TalkerController.updateRateTalker);
+
 module.exports = router;
