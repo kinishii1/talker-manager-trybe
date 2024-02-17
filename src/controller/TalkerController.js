@@ -1,4 +1,5 @@
 const path = require('path');
+
 const readJsonData = require('../services/readJsonData');
 const writeJsonData = require('../services/writeJsonData');
 
@@ -50,18 +51,65 @@ const deleteTalker = async (req, res) => {
   res.status(204).end();
 };
 
+// eslint-disable-next-line max-lines-per-function, complexity, sonarjs/cognitive-complexity
 const getTalkerByName = async (req, res) => {
-  const name = req.query.q;
+  const { q, rate, date } = req.query;
   const data = await readJsonData(PATH);
 
-  if (!name) return res.status(200).json(data);
+  if (!q && !rate && !date) return res.status(200).json(data);
 
-  const filteredData = data
-    .filter((talker) => talker.name.toLowerCase().includes(name.toLowerCase()));
+  if (q && !rate && !date) {
+    const filteredData = data
+      .filter((talker) => talker.name.toLowerCase().includes(q.toLowerCase()));
+    if (filteredData.length === 0) return res.status(200).json([]);
+    return res.status(200).json(filteredData);
+  }
 
-  if (filteredData.length === 0) return res.status(200).json([]);
+  if (!q && rate && !date) {
+    const filteredData = data.filter((talker) => talker.talk.rate === Number(rate));
+    if (filteredData.length === 0) return res.status(200).json([]);
+    return res.status(200).json(filteredData);
+  }
 
-  res.status(200).json(filteredData);
+  if (!q && !rate && date) {
+    const filteredData = data.filter((talker) => talker.talk.watchedAt === date);
+    if (filteredData.length === 0) return res.status(200).json([]);
+    return res.status(200).json(filteredData);
+  }
+
+  if (q && rate && !date) {
+    const filteredData = data
+      .filter((talker) => talker.name.toLowerCase().includes(q.toLowerCase())
+        && talker.talk.rate === Number(rate));
+    if (filteredData.length === 0) return res.status(200).json([]);
+    return res.status(200).json(filteredData);
+  }
+
+  if (q && !rate && date) {
+    const filteredData = data
+      .filter((talker) => talker.name.toLowerCase().includes(q.toLowerCase())
+        && talker.talk.watchedAt === date);
+    if (filteredData.length === 0) return res.status(200).json([]);
+    return res.status(200).json(filteredData);
+  }
+
+  if (!q && rate && date) {
+    const filteredData = data.filter((talker) => talker.talk.rate === Number(rate)
+      && talker.talk.watchedAt === date);
+    if (filteredData.length === 0) return res.status(200).json([]);
+    return res.status(200).json(filteredData);
+  }
+
+  if (q && rate && date) {
+    const filteredData = data
+      .filter((talker) => talker.name.toLowerCase().includes(q.toLowerCase())
+        && talker.talk.rate === Number(rate)
+        && talker.talk.watchedAt === date);
+    if (filteredData.length === 0) return res.status(200).json([]);
+    return res.status(200).json(filteredData);
+  }
+
+  return res.status(200).json([]);
 };
 
 module.exports = {
