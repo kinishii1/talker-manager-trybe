@@ -18,7 +18,7 @@ router.get('/search',
   validateToken,
   validateRateQuery,
   validateWatchedDate,
-  TalkerController.getTalkerByName);
+  TalkerController.getTalkerByQuery);
 router.get('/:id', TalkerController.getTalkerById);
 router.post('/',
   validateToken,
