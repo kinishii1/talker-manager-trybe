@@ -1,5 +1,7 @@
 const isFloat = require('../utils/isFloat');
 
+const rateMessage = 'O campo "rate" deve ser um número inteiro entre 1 e 5';
+
 const validateToken = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
@@ -56,11 +58,11 @@ const validateTalkR = (req, res, next) => {
   }
   if (isFloat(talk.rate)) {
     return res.status(400)
-      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+      .json({ message: rateMessage });
   }
   if (talk.rate < 1 || talk.rate > 5) {
     return res.status(400)
-      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+      .json({ message: rateMessage });
   }
   next();
 };
@@ -71,15 +73,15 @@ const validateRate = (req, res, next) => {
   if (rate === undefined) return res.status(400).json({ message: 'O campo "rate" é obrigatório' });
   if (Number.isNaN(Number(rate))) {
     return res.status(400)
-      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+      .json({ message: rateMessage });
   }
   if (isFloat(rate)) {
     return res.status(400)
-      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+      .json({ message: rateMessage });
   }
   if (Number(rate) < 1 || rate > 5) {
     return res.status(400)
-      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+      .json({ message: rateMessage });
   }
   next();
 };

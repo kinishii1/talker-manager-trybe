@@ -13,12 +13,13 @@ const { validateToken,
 const { validateRateQuery, validateWatchedDate } = require('../middlewares/query');
 
 router.get('/', TalkerController.getAllTalkers);
+router.patch('/rate/:id', validateToken, validateRate, TalkerController.updateRateTalker);
 router.get('/search',
   validateToken,
   validateRateQuery,
   validateWatchedDate,
   TalkerController.getTalkerByName);
-router.get('/:id', validateToken, TalkerController.getTalkerById);
+router.get('/:id', TalkerController.getTalkerById);
 router.post('/',
   validateToken,
   validateName,
@@ -34,6 +35,5 @@ router.put('/:id',
   validateTalkR,
   TalkerController.updateTalker);
 router.delete('/:id', validateToken, TalkerController.deleteTalker);
-router.patch('/rate/:id', validateToken, validateRate, TalkerController.updateRateTalker);
 
 module.exports = router;
