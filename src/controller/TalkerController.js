@@ -3,6 +3,7 @@ const readJsonData = require('../services/readJsonData');
 const writeJsonData = require('../services/writeJsonData');
 const Talkers = require('../models/Talkers');
 const { applyFilters } = require('../utils/queryFilters');
+const connection = require('../db/connection');
 
 const PATH = path.join(__dirname, '..', 'talker.json');
 
@@ -15,7 +16,7 @@ class TalkerController {
   static async getTalkerById(req, res) {
     const { id } = req.params;
     const data = await Talkers.findById(id);
-  
+
     if (!data) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
     res.status(200).json(data);
   }
@@ -32,7 +33,7 @@ class TalkerController {
     const newContent = req.body;
 
     const data = await Talkers.updateTalkerById(id, newContent);
-  
+
     if (!data) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
     res.status(200).json(data);
   }
@@ -59,14 +60,30 @@ class TalkerController {
     const { id } = req.params;
     const { rate } = req.body;
     const data = await readJsonData(PATH);
-  
+
     const foundTalker = data.find((talker) => talker.id === Number(id));
     if (!foundTalker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-  
+
     const updatedTalker = { ...foundTalker, talk: { ...foundTalker.talk, rate } };
     const updatedData = data.map((talker) => (talker.id === Number(id) ? updatedTalker : talker));
     await writeJsonData(PATH, updatedData);
     return res.status(204).json();
+  }
+
+  static async getDB(_req, res) {
+    const [rows] = await connection.execute('SELECT * FROM talkers');
+
+    const formattedData = rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      age: row.age,
+      talk: {
+        watchedAt: row.talk_watched_at,
+        rate: row.talk_rate,
+      },
+    }));
+
+    return res.status(200).json(formattedData);
   }
 }
 

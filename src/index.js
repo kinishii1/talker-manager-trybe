@@ -1,4 +1,7 @@
 const express = require('express');
+const dotenv = require('dotenv');
+
+dotenv.config();
 const TalkerRoutes = require('./routes/TalkerRoutes');
 const LoginRoutes = require('./routes/LoginRoutes');
 

@@ -13,6 +13,7 @@ const { validateToken,
 const { validateRateQuery, validateWatchedDate } = require('../middlewares/query');
 
 router.get('/', TalkerController.getAllTalkers);
+router.get('/db', TalkerController.getDB);
 router.patch('/rate/:id', validateToken, validateRate, TalkerController.updateRateTalker);
 router.get('/search',
   validateToken,
